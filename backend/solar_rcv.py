@@ -7,7 +7,7 @@ pwr_listener_socket.bind(("", 8888))
 # Poll for energy data
 while True:
     received_data = pwr_listener_socket.recvfrom(1024)
-    print("Received pkt: " received_data)
+    print("Received pkt: ", received_data)
 
 pwr_listener_socket.close()
 
