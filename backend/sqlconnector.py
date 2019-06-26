@@ -1,6 +1,7 @@
 import mysql.connector
-#test
+
 class DB_Connector:
+
     def __init__(self, usr, pwd, url, db):
         """
         constructor to connect to a databse
@@ -15,25 +16,25 @@ class DB_Connector:
                 "raise_on_warnings": True
                 }
         
-        cnx = mysql.connector.connect(**config)
+        self.cnx = mysql.connector.connect(**config)
         
         # intialize cursor
-        mycursor = cnx.cursor()
-   
-   def getTable(table):
+        self.mycursor = self.cnx.cursor()
+
+    def getTable(self, table):
         """
         returns all rows to the specified table
         """
 
         # SQL query
-        sql = ("SELECT * FROM :a")
+        sql = ("SELECT * FROM "+ table)
     
-        mycursor.execute(sql, a = table)
-        myresult = mycursor.fetchall()
+        self.mycursor.execute(sql)
+        myresult = self.mycursor.fetchall()
    
         return myresult
     
-    for x in myresult:
-        print(x)
-    
-    cnx.close()
+    #for x in myresult:
+    #    print(x)
+    #
+    #cnx.close()
