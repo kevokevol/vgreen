@@ -1,5 +1,5 @@
 import mysql.connector
-
+#test
 class DB_Connector:
     def __init__(self, usr, pwd, url, db):
         """
