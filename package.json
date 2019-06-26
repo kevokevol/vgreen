@@ -1,0 +1,15 @@
+{
+  "name": "roketto-dan",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "install": "concurrently \"pip3 install -r backend/requirements.txt\" \"cd frontend && npm install\" && cd ..",
+    "start": "concurrently \"python3 backend/server.py\" \"cd frontend && npm run start\""
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "concurrently": "^4.1.1"
+  }
+}
