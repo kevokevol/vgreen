@@ -21,7 +21,7 @@ DAT.Globe = function(container, opts) {
   
   var colorFn = opts.colorFn || function(x) {
     var c = new THREE.Color();
-    c.setHSL( ( 0.6 - ( x * 0.5 ) ), 1.0, 0.5 );
+    c.setHSL( ( 0.6 - ( x / 1000 * 0.5 ) ), 1.0, 0.5 );
     return c;
   };
   var imgDir = opts.imgDir || '/globe/';
@@ -139,7 +139,7 @@ DAT.Globe = function(container, opts) {
     mesh.scale.set( 1.1, 1.1, 1.1 );
     scene.add(mesh);
 
-    geometry = new THREE.BoxGeometry(0.75, 0.75, 1);
+    geometry = new THREE.BoxGeometry(5, 5, 1);
     geometry.applyMatrix(new THREE.Matrix4().makeTranslation(0,0,-0.5));
 
     point = new THREE.Mesh(geometry);
@@ -175,8 +175,8 @@ DAT.Globe = function(container, opts) {
     this.is_animated = opts.animated;
     opts.format = opts.format || 'magnitude'; // other option is 'legend'
     if (opts.format === 'magnitude') {
-      step = 3;
-      colorFnWrapper = function(data, i) { return colorFn(data[i+2]); }
+      step = 4;
+      colorFnWrapper = function(data, i) { return colorFn(data[i+3]); }
     } else if (opts.format === 'legend') {
       step = 4;
       colorFnWrapper = function(data, i) { return colorFn(data[i+3]); }

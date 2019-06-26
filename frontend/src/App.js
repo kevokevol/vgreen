@@ -6,7 +6,8 @@ class App extends React.Component {
   constructor(props){
     super(props)
     this.state = {
-      data: {}
+      data: {},
+      globeData: [['1990', [0,0,0.1,50, 0,100,0.1,50]], ['1995', [0,0,0.1,50, 0,100,0.1,50]], ['2000', [0,0,0.1,50, 0,100,0.1,50]]]
     }
   }
 
@@ -14,12 +15,13 @@ class App extends React.Component {
     this.APIClient = new APIClient(null)
     let data = await this.APIClient.apiGet()
     this.setState({data: data}, ()=>{console.log(this.state.data)})
+    setTimeout(()=>{this.setState({globeData: [['1990', [0,0,1,100, 0,100,0.1,50]], ['1995', [0,0,1,100, 0,100,0.1,50]], ['2000', [0,0,1,100, 0,100,0.1,50 ]]]})}, 2000)
   }
   
   render(){
     return (
       <div className="App">
-        <WebGLGlobe/>
+        <WebGLGlobe data={this.state.globeData}/>
       </div>
     );
   }
