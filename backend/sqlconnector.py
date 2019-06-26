@@ -27,12 +27,22 @@ class DB_Connector:
         """
 
         # SQL query
-        sql = ("SELECT * FROM "+ table)
+        sql = ("SELECT * FROM "+ table+";")
     
         self.mycursor.execute(sql)
         myresult = self.mycursor.fetchall()
    
         return myresult
+    def SP_updateProd(self,pwr):
+        """
+        updates our solar panel production
+        """
+
+        sql = ("UPDATE roketto_dan.powercenters SET production ="+str(pwr)+" WHERE id = 0;")
+
+        self.mycursor.execute(sql)
+        self.cnx.commit()
+
     
     #for x in myresult:
     #    print(x)
