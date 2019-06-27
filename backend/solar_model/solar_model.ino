@@ -11,13 +11,19 @@ byte mac[] = {
 };
 
 // local port to send data
-unsigned int localPort = 8888;
+unsigned int sendPort = 9000;
+
+// desktop IP
+//IPAddress ip(10, 1, 193, 147);
+//IPAddress ip(169, 254, 49, 21);
+//IPAddress ip(169, 254, 190, 234);
+IPAddress ip(10, 0, 1, 24);
 
 void setup() {
   Serial.begin(115200);
   
   // establish Ethernet connection
-  Ethernet.begin(mac, Ethernet.localIP());
+  Ethernet.begin(mac, ip);
 
   // Check for Ethernet hardware present
   if (Ethernet.hardwareStatus() == EthernetNoHardware) {
@@ -31,20 +37,28 @@ void setup() {
   }
 
   // start UDP
-  Udp.begin(localPort);
+  Udp.begin(sendPort);
 }
 
 void loop() {
   char kwData[4];
 
-  kwData[0] = "t";
-  kwData[1] = "e";
-  kwData[2] = "s";
-  kwData[3] = "t";
+  kwData[0] = 1;
+  kwData[1] = 2;
+  kwData[2] = 3;
+  kwData[3] = 5;
 
   // send data to desktop
-  Udp.beginPacket(Ethernet.localIP(), localPort);
+  if(Udp.beginPacket(ip, sendPort)) {
+    Serial.println("success!");
+  } else {
+    Serial.println("failed connection");
+  }
   Udp.write(kwData);
   Udp.endPacket();
-  
+
+//  Serial.println(Ethernet.localIP());
+  //Serial.println("test");
+
+  delay(5);
 }
