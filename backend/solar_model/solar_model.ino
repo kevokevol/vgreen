@@ -17,7 +17,7 @@ unsigned int sendPort = 9000;
 //IPAddress ip(10, 1, 193, 147);
 //IPAddress ip(169, 254, 49, 21);
 //IPAddress ip(169, 254, 190, 234);
-IPAddress ip(10, 0, 1, 24);
+IPAddress ip(10, 0, 1, 25);
 
 void setup() {
   Serial.begin(115200);

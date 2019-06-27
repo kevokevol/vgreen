@@ -3,7 +3,7 @@ import socket
 print(socket.gethostbyname(socket.gethostname()))
 # Init listener socket to poll for energy (KwH) from Arduino
 pwr_listener_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-pwr_listener_socket.bind(("10.0.1.24", 9000))
+pwr_listener_socket.bind(("10.0.1.25", 9000))
 
 # Poll for energy data
 while True:
