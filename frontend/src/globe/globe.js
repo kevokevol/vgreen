@@ -139,7 +139,8 @@ DAT.Globe = function(container, opts) {
     mesh.scale.set( 1.1, 1.1, 1.1 );
     scene.add(mesh);
 
-    geometry = new THREE.BoxGeometry(5, 5, 1);
+    geometry = new THREE.CylinderGeometry( 2.5, 2.5, 1, 32 );
+    geometry.applyMatrix(new THREE.Matrix4().makeRotationX(Math.PI/2));
     geometry.applyMatrix(new THREE.Matrix4().makeTranslation(0,0,-0.5));
 
     point = new THREE.Mesh(geometry);
