@@ -17,7 +17,31 @@ unsigned int sendPort = 9000;
 //IPAddress ip(10, 1, 193, 147);
 //IPAddress ip(169, 254, 49, 21);
 //IPAddress ip(169, 254, 190, 234);
+//IPAddress ip(10, 0, 1, 27);
 IPAddress ip(8, 8, 8, 4);
+
+/*
+ * Reads voltage from analog pin A0 in Arduino
+ */
+float readSolarVoltage() {
+  int sensor_reading = analogRead(A0);
+  float voltage = sensor_reading * (5.0/1023.0);
+
+  return voltage;
+}
+
+/*
+ * Build packet to send via UDP
+ */
+void buildPacket(char pkt[4], int num) {
+  pkt[3] = '0' + num % 10;
+  num /= 10;
+  pkt[2] = '0' + num % 10;
+  num /= 10;
+  pkt[1] = '0' + num % 10;
+  num /= 10;
+  pkt[0] = '0' + num % 10;
+}
 
 void setup() {
   Serial.begin(115200);
@@ -41,12 +65,23 @@ void setup() {
 }
 
 void loop() {
+  float solar_voltage;
   char kwData[4];
 
-  kwData[0] = 1;
-  kwData[1] = 2;
-  kwData[2] = 3;
-  kwData[3] = 5;
+//  kwData[0] = '1';
+//  kwData[1] = '2';
+//  kwData[2] = '3';
+//  kwData[3] = '5';
+
+  // read voltage from solar panel
+  solar_voltage = readSolarVoltage();
+
+  // DELETE LATER for testing sake send voltage * 100
+  solar_voltage *= 100;
+  Serial.println(solar_voltage);
+  buildPacket(kwData, solar_voltage);
+  Serial.println(kwData);
+  
 
   // send data to desktop
   if(Udp.beginPacket(ip, sendPort)) {
