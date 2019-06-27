@@ -1,3 +1,5 @@
+import os
+import json
 import mysql.connector
 
 class DB_Connector:
@@ -43,8 +45,33 @@ class DB_Connector:
         self.mycursor.execute(sql)
         self.cnx.commit()
 
+    def populate_power_plant_table(self, table_name, path_to_power_plant_data):
+        with open(path_to_power_plant_data, 'r') as f:
+            power_plants = json.load(f)
+
+            for index, plant in enumerate(power_plants):
+                state = str(plant["state"])
+                latitude = float(plant["lat"])
+                longitude = float(plant["lng"])
+                power_generation = float(plant["power_generation"])
+                carbon_emission = float(plant["carbon_emission"])
+
+                query = "INSERT INTO roketto_dan.{} VALUES({},{},{},{},{},{})".format(table_name, index, state. latitude, longitude, power_generation, carbon_emission)
+                print(query)
+                self.mycursor.execute(sql)
+
+            self.cnx.commit()
+
+
     
     #for x in myresult:
     #    print(x)
     #
     #cnx.close()
+
+
+if __name__ == "__main__":
+    conn = DB_Connector("root", "ca$hm0ney", "roketto-dan.c0k9vwwy6vyu.us-west-1.rds.amazonaws.com", "roketto_dan")
+    path = os.path.abspath(os.path.join(os.pardir, os.getcwd(), "../out/power_centers.json"))
+    print(path)
+    conn.populate_power_plant_table("powercenters", path)

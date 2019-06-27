@@ -1,3 +1,4 @@
+import os
 import xlrd
 import json
 import googlemaps
@@ -14,13 +15,12 @@ def convert_excel_to_json(path_to_excel):
 	for row in range(2, worksheet.nrows):
 		try:
 			plant_dict = {
-				"code": int(worksheet.cell(row, 0).value),
 				"name": str(worksheet.cell(row, 1).value),
 				"state": str(worksheet.cell(row, 2).value),
-				"generation": str(worksheet.cell(row, 8).value),
+				"power_generation": int(worksheet.cell(row, 8).value),
 				"total_fuel_consumption": int(worksheet.cell(row, 10).value),
 				"fuel_consumption_per_kwh": int(worksheet.cell(row, 11).value),
-				"carbon_emission": str(worksheet.cell(row, 15).value)
+				"carbon_emission": int(worksheet.cell(row, 15).value)
 			}
 		except ValueError as e:
 			break
@@ -59,6 +59,6 @@ def add_power_plant_locations(power_plants, api_key):
 
 
 if __name__ == "__main__":
-	plants = convert_excel_to_json("data/emissions2017.xlsx")
+	plants = convert_excel_to_json(os.path.abspath(os.path.join(os.getcwd(), os.pardir, "data/emissions2017.xlsx")))
 	plants_and_locations = add_power_plant_locations(plants, "AIzaSyBjlvKLxlKPB05QKCmp4NRhV5nSvd9TJ-s")
-	save_to_file(plants_and_locations, "data/power_plants.json")
+	save_to_file(plants_and_locations, os.path.abspath(os.path.join(os.getcwd(), os.pardir, "out/power_plants.json")))
