@@ -111,9 +111,9 @@ class DB_Connector:
                 power_generation = float(plant["power_generation"])
                 carbon_emission = float(plant["carbon_emission"])
 
-                query = "INSERT INTO roketto_dan.{} VALUES({},{},{},{},{},{})".format(table_name, index, state. latitude, longitude, power_generation, carbon_emission)
+                query = "INSERT INTO roketto_dan.{} VALUES({},\"{}\",{},{},{},{})".format(table_name, index, state, latitude, longitude, power_generation, carbon_emission)
                 print(query)
-                self.mycursor.execute(sql)
+                self.mycursor.execute(query)
 
             self.cnx.commit()
 
