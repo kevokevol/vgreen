@@ -23,7 +23,7 @@ class DB_Connector:
 
     def getTable(self, table):
         """
-        returns all rows to the specified table
+        returns all rows to the specified table(tupule)
         """
 
         # SQL query
@@ -42,6 +42,61 @@ class DB_Connector:
 
         self.mycursor.execute(sql)
         self.cnx.commit()
+    def getLatLongData(self,cityName):
+        """
+        returns the latitude and longitude of a given data center(tupule)
+        """
+
+        word = "\"" + cityName + "\""
+        sql = ("SELECT latitude,longitude FROM roketto_dan.datacenters WHERE name ="+word+";")
+        self.mycursor.execute(sql)
+        myresult = self.mycursor.fetchall()
+
+        return myresult
+    def getLatLongPower(self,name):
+        """
+        returns the latitude and longitude of a given power center(tupule)
+        """
+
+        word = "\"" + name + "\""
+        sql = ("SELECT latitude,longitude FROM roketto_dan.powercenters WHERE name ="+word+";")
+        self.mycursor.execute(sql)
+        myresult = self.mycursor.fetchall()
+
+        return myresult
+    def getConsumption(self,name):
+        """
+        returns the power consumption for a given data center(int)
+        """
+        word = "\"" +name+ "\""
+        sql = ("SELECT consumption FROM roketto_dan.datacenters WHERE name = "+word+";")
+        self.mycursor.execute(sql)
+        myresult = self.mycursor.fetchone()
+
+        return myresult 
+    def getProduction(self,name):
+        """
+        returns the power production for a given power center(int)
+        """
+        word = "\"" +name+ "\""
+        sql = ("SELECT production FROM roketto_dan.powercenters WHERE name = "+word+";")
+        self.mycursor.execute(sql)
+        myresult = self.mycursor.fetchone()
+
+        return myresult
+
+    def getPercentRenew(self,name):
+        """
+        returns the percent renewable for a given power center(int)
+        """
+        word = "\"" +name+ "\""
+        sql = ("SELECT percent_renewable FROM roketto_dan.powercenters WHERE name = "+word+";")
+        self.mycursor.execute(sql)
+        myresult = self.mycursor.fetchone()
+
+        return myresult
+
+
 
     
     #for x in myresult:
