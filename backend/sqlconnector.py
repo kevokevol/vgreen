@@ -1,4 +1,5 @@
 import os
+import math
 import json
 import mysql.connector
 
@@ -143,7 +144,38 @@ class DB_Connector:
             self.cnx.commit()
 
 
-    
+    def _euclidean_distance(lat1, lng1, lat2, lng2):
+        return math.sqrt((lat1 - lat2)**2 + (lng1 - lng2)**2)
+
+    def populate_relations_table(self, rel_table_name, datacenter_table_name, plant_table_name):
+        data_centers = self.getTable(datacenter_table_name)
+        power_centers = self.getTable(plant_table_name)
+        for data_center in data_centers:
+            data_lat = data_center[2]
+            data_lng = data_center[3]
+
+            power_lat = power_centers[0][2]
+            power_lng = power_centers[0][3]
+            min_distance = _euclidean_distance(data_lat, data_lng, power_lat, power_lng)
+            associated_power_plant = power_centers[0]
+            for power_center in power_centers:
+                data_lat = data_center[2]
+                data_lng = data_center[3]
+
+                power_lat = power_center[2]
+                power_lng = power_center[3]
+                pot_min_distance = _euclidean_distance(data_lat, data_lng, power_lat, power_lng)
+
+                if pot_min_distance < min_distance:
+                    min_distance = pot_min_distance
+                    associated_power_plant = power_center
+
+            query = "INSERT INTO roketto_dan.{} VALUES({},{},{})".format(rel_table_name, data_center[0], associated_power_plant[0], associated_power_plant[5]/associated_power_plant[4])
+            print(query)
+            self.mycursor.execute(query)
+
+        self.cnx.commit()
+
 
 
 
