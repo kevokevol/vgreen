@@ -51,13 +51,14 @@ class DB_Connector:
 
     def SP_updateProd(self,pwr):
         """
-        updates our solar panel production
+        updates our solar panel production (id=9999)
         """
 
         sql = ("UPDATE roketto_dan.powercenters SET power_generation ="+str(pwr*1000)+" WHERE id = 9999;")
 
         self.mycursor.execute(sql)
         self.cnx.commit()
+
     def getLatLongData(self,cityName):
         """
         returns the latitude and longitude of a given data center(tupule)
@@ -69,6 +70,7 @@ class DB_Connector:
         myresult = self.mycursor.fetchall()
 
         return myresult
+
     def getLatLongPower(self,name):
         """
         returns the latitude and longitude of a given power center(tupule)
@@ -80,6 +82,7 @@ class DB_Connector:
         myresult = self.mycursor.fetchall()
 
         return myresult
+
     def getConsumption(self,name):
         """
         returns the power consumption for a given data center(int)
@@ -119,6 +122,26 @@ class DB_Connector:
 
         return myresult
 
+    def insertRelation(self, datacenter_id, powercenter_id, c_footprint):
+        """
+        insert a <datacenter, powercenter> pair with an assoicated carbon footprint
+        """
+        sql = ("INSERT INTO roketto_dan.pairings (datacenter_id, powercenter_id, c_footprint)"
+                "VALUES (" + str(datacenter_id) + ", " + str(powercenter_id) + ", " + str(c_footprint) + ")")
+
+        self.mycursor.execute(sql)
+        self.cnx.commit()
+
+    def queryRelation(self):
+        """
+        return a <datacenter, powercenter> pair with an assoicated carbon footprint
+        """
+        sql = ("SELECT * FROM roketto_dan.pairings")
+
+        self.mycursor.execute(sql)
+        myresult = self.mycursor.fetchall()
+
+        return myresult
 
 
     def populate_power_plant_table(self, table_name, path_to_power_plant_data):
