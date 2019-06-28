@@ -33,9 +33,9 @@ def hello():
     data = {}
     data['power'] = power + int(time.perf_counter()) % 40
     data['renewable'] = renewable
-    data['emissions'] = total_emission
+    data['emissions'] = total_emission + time.perf_counter() % 5
     data['data_centers'] = rows
-    
+
     return json.dumps(data)
 
 if __name__ == '__main__':

@@ -147,7 +147,7 @@ class Analytics extends React.Component {
                 </Chart>
                 <ChartTitle>
                     <h1>CO2 Emission (Tons)</h1>
-                    <h2>{emissionData[emissionData.length-1].y} tons</h2>
+                    <h2>{format('.2f')(emissionData[emissionData.length-1].y)} tons</h2>
                 </ChartTitle>
                 <Chart>
                     <XYPlot
