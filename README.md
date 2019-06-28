@@ -7,7 +7,7 @@ This project visualizes the power usage of worldwide data centers, along with th
 
 Our project seeks to solve that challenge. Together with [technology that allows companies to selectively reduce power consumption at data centers](https://www.technologyreview.com/s/409724/saving-energy-in-data-centers/), our visualization helps data center administrators identify which data centers are currently experiencing a surge in renewable energy, and dynamically reallocate energy needs to data centers using greener energy at the time. 
 
-The frontend is created using [WebGL Globe](https://github.com/dataarts/webgl-globe) and [react-vis](https://github.com/uber/react-vis). The backend is created using Python3 and MySQL. There is a hardware component: Our worldwide power output is represented by a solar panel connected to our database through an Arduino. The circuit diagram for this can be found at https://github.com/kevinl94303/roketto-dan/blob/master/backend/borathon_circuit_diagram.png. 
+The frontend is created using React and utilizes [WebGL Globe](https://github.com/dataarts/webgl-globe) and [react-vis](https://github.com/uber/react-vis). The backend is created using Python3 and MySQL. There is a hardware component: Our worldwide power output is represented by a solar panel connected to our database through an Arduino. The circuit diagram for this can be found at https://github.com/kevinl94303/roketto-dan/blob/master/backend/borathon_circuit_diagram.png. 
 
 # Startup Instructions
 
