@@ -198,6 +198,8 @@ class DB_Connector:
 
         self.cnx.commit()
 
+    def close_connection(self):
+        self.cnx.close()
 
 
 if __name__ == "__main__":
