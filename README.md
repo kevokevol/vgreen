@@ -9,6 +9,8 @@ Our project seeks to solve that challenge. Together with [technology that allows
 
 The frontend is created using React and utilizes [WebGL Globe](https://github.com/dataarts/webgl-globe) and [react-vis](https://github.com/uber/react-vis). The backend is created using Python3 and MySQL. There is a hardware component: Our worldwide power output is represented by a solar panel connected to our database through an Arduino. The circuit diagram for this can be found [here](https://github.com/kevinl94303/roketto-dan/blob/master/backend/borathon_circuit_diagram.png). 
 
+This is the 2019 VMWare Borathon submission of Kevin Li, Andrew Chen, Aubhro Sengupta, James Kim, and Dan Kwon. 
+
 # Startup Instructions
 
 Clone the repo
