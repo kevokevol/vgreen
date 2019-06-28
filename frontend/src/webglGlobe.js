@@ -55,7 +55,8 @@ class WebGLGlobe extends React.Component {
         }
 
         var colorFn = function(x) {
-            var c = new THREE.Color(1-x, x, 0);
+            let scaled = (x - 0.6) / 0.9
+            var c = new THREE.Color(scaled, 1-scaled, 0);
             return c;
         };
 

@@ -14,7 +14,7 @@ con = DB_Connector("root", "ca$hm0ney", "roketto-dan.c0k9vwwy6vyu.us-west-1.rds.
 # con.SP_updateProd(10)
 
 # test insertRelatioN()
-con.insertRelation(2, 4, 6)
+con.insertRelation(10, 5, 9)
 relations = con.queryRelation()
 
 for row in relations:
@@ -23,11 +23,11 @@ for row in relations:
 
 #  con.SP_updateProd(20)
 
-# # query rows
-# rows = con.getTable("datacenters")
+# query rows
+rows = con.getTableInState("powercenters", "HI")
 
-# # print rows
-# for dc in rows:
-#     print(dc)
+# print rows
+for dc in rows:
+    print(dc)
 
 

@@ -1,6 +1,7 @@
 import React from 'react'
 import styled, { withTheme } from 'styled-components'
 import {XYPlot, XAxis, YAxis, VerticalGridLines, HorizontalGridLines, AreaSeries} from 'react-vis';
+import { format } from 'd3-format'
 
 const AnalyticsWrapper = styled.div`
     width: 33vw;
@@ -67,25 +68,25 @@ class Analytics extends React.Component {
             Greenest = _greenest.map((el, i)=>
                 <DataCenter color={this.props.theme.color1} key={i}>
                     <h3>{el[0]}</h3>
-                    <h3>{el[1]}</h3>
+                    <h3>{format(".2f")(el[1])}</h3>
                 </DataCenter>
             )
             Dirtiest = _dirtiest.map((el, i)=>
                 <DataCenter color={this.props.theme.color3} key={i}>
                     <h3>{el[0]}</h3>
-                    <h3>{el[1]}</h3>
+                    <h3>{format(".2f")(el[1])}</h3>
                 </DataCenter>
             )
         }
         return (
             <AnalyticsWrapper>
                 <ChartTitle>
-                    <h1>Power Usage (kWH)</h1>
-                    <h2>{powerData[powerData.length-1].y} kWH</h2>
+                    <h1>Power Usage (MWh)</h1>
+                    <h2>{Math.round(powerData[powerData.length-1].y)} MWh</h2>
                 </ChartTitle>
                 <Chart>
-                    <XYPlot 
-                        yDomain={[0,10]}
+                    <XYPlot
+                        yDomain={[0,500]}
                         width={300}
                         height={150}>
                         <VerticalGridLines />
@@ -114,12 +115,12 @@ class Analytics extends React.Component {
                     </XYPlot>
                 </Chart>
                 <ChartTitle>
-                <h1>Renewable Power Available (kWH)</h1>
-                <h2>{renewableData[renewableData.length-1].y} kWH</h2>
+                <h1>Renewable Power Available (GWh)</h1>
+                <h2>{renewableData[renewableData.length-1].y} GWh</h2>
                 </ChartTitle>
                 <Chart>
                     <XYPlot
-                        yDomain={[0,10]}
+                        yDomain={[0,3000]}
                         width={300}
                         height={150}>
                         <VerticalGridLines />
@@ -130,6 +131,7 @@ class Analytics extends React.Component {
                             line: {stroke: this.props.theme.color1},
                         }}/>
                         <YAxis 
+                            tickFormat={tick => format('.2s')(tick)}
                             style={{
                             line: {stroke: this.props.theme.color1},
                             text: {stroke: 'none', fill: this.props.theme.color1, fontWeight: 600, fontFamily: 'Metropolis',
@@ -145,11 +147,11 @@ class Analytics extends React.Component {
                 </Chart>
                 <ChartTitle>
                     <h1>CO2 Emission (Tons)</h1>
-                    <h2>{emissionData[emissionData.length-1].y} tons</h2>
+                    <h2>{format('.2f')(emissionData[emissionData.length-1].y)} tons</h2>
                 </ChartTitle>
                 <Chart>
                     <XYPlot
-                        yDomain={[0,10]}
+                        yDomain={[0,100]}
                         width={300}
                         height={150}>
                         <VerticalGridLines />

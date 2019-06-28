@@ -1,56 +1,43 @@
-from flask import Flask
+from flask import Flask, g
 from flask_cors import CORS
 import json
 
 import time
+from sqlconnector import DB_Connector
+import preprocess
 
 app = Flask(__name__)
 CORS(app)
 
+def get_db():
+    """Opens a new database connection if there is none yet for the
+    current application context.
+    """
+    if not hasattr(g, 'mysql_db'):
+        g.mysql_db = DB_Connector("root", "ca$hm0ney", "roketto-dan.c0k9vwwy6vyu.us-west-1.rds.amazonaws.com", "roketto_dan")
+    return g.mysql_db
+
+@app.teardown_appcontext
+def close_db(error):
+    """Closes the database again at the end of the request."""
+    if hasattr(g, 'mysql_db'):
+        g.mysql_db.close_connection()
+
 @app.route("/")
 def hello():
+    db_con = get_db()
+    renewable = preprocess.get_renewable_output(db_con)
+    power = preprocess.get_total_power(db_con)
+    total_emission, rows = preprocess.get_each_emission(db_con)
+
     data = {}
-    data['power'] = int(time.perf_counter()) % 10
-    data['renewable'] = (int(time.perf_counter()) + 5) % 10
-    data['emissions'] = (int(time.perf_counter()) + 2) % 10
-    data['data_centers'] = [
-        ('3','Palo Alto','37.4021','-122.145','7821', '0'),
-        ('4','San Francisco','37.7833','-122.393','4391', '0.9'),
-        ('5','Bellevue','47.6151','-122.196','5000', '0.4'),
-        ('6','Colorado Springs','38.9393','-104.812','5600', '0.5'),
-        ('7','Broomfield','39.9225','-105.116','5412', '0.1'),
-        ('8','Farmers Branch','32.91','-96.928','4111', '0.4'),
-        ('9','Coppell','32.9836','-97.014','4555', '0.9'),
-        ('10','Reston','38.9548','-77.3639','6765', '0.2'),
-        ('11','Burlington','42.4864','-71.1889','5654', '0.3'),
-        ('12','Boston','42.354','-71.0615','5098', '0.1'),
-        ('13','San José','9.99158','-84.1621','4899', '0.4'),
-        ('14','São Paulo','-23.6006','-46.6938','5768', '0.1'),
-        ('15','Cork','51.8891','-8.58649','7321', '0.2'),
-        ('16','London','51.4341','-0.523541','5123', '0.12'),
-        ('17','Milton Keynes','52.0357','-0.773838','4878', '0.1'),
-        ('18','Madrid','40.4628','-3.80195','5889', '0.13'),
-        ('19','Barcelona','41.4021','2.19315','6123', '0.14'),
-        ('20','Puteaux','48.8889','2.24025','4232', '0.15'),
-        ('21','Utrecht','52.0718','5.07768','4513', '0.08'),
-        ('22','München','48.1328','11.6899','5812', '0.3'),
-        ('23','Sofia','42.6672','23.3647','4762', '0.4'),
-        ('24','Moscow','55.7759','37.5532','5712', '0.2'),
-        ('25','Tel Aviv','32.1639','34.8116','4900', '0.14'),
-        ('26','Yerevan','40.2098','44.5161','5983', '0.12'),
-        ('27','Dubai','25.1005','55.1691','8301', '0.08'),
-        ('28','Wakadewadi','18.5387','73.8514','6783', '0.03'),
-        ('29','Bengaluru','12.9024','77.5953','5991', '0'),
-        ('30','Singapore','1.29471','103.86','6332', '0.1'),
-        ('31','Hong Kong','22.2878','114.218','5371', '0.12'),
-        ('32','Beijing','39.9835','116.326','9867', '0.3'),
-        ('33','Shanghai','31.3051','121.512','7123', '0.2'),
-        ('34','Seoul','37.5131','127.06','8931', '0.13'),
-        ('35','Tokyo','35.657','139.757','7231', '0.14'),
-        ('36','Melbourne','-37.8219','144.963','5412', '0.4'),
-        ('37','Sydney','-33.8684','151.208','6574', '0.3')
-    ]
+    data['power'] = power + int(time.perf_counter()) % 40
+    data['renewable'] = renewable
+    data['emissions'] = total_emission + time.perf_counter() % 5
+    data['data_centers'] = rows
+
     return json.dumps(data)
 
 if __name__ == '__main__':
+    con = DB_Connector("root", "ca$hm0ney", "roketto-dan.c0k9vwwy6vyu.us-west-1.rds.amazonaws.com", "roketto_dan")
     app.run('0.0.0.0')

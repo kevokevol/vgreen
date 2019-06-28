@@ -36,13 +36,26 @@ class DB_Connector:
         myresult = self.mycursor.fetchall()
    
         return myresult
+    
+    def getTableInState(self, table, state):
+        """
+        returns all rows matching state (two letter code) to the specified table
+        """
+
+        # SQL query
+        sql = ("SELECT * FROM "+ table +" WHERE state=\""+state+"\";")
+    
+        self.mycursor.execute(sql)
+        myresult = self.mycursor.fetchall()
+   
+        return myresult
 
     def SP_updateProd(self,pwr):
         """
         updates our solar panel production (id=9999)
         """
 
-        sql = ("UPDATE roketto_dan.powercenters SET power_generation = " + str(pwr) + " WHERE id = 9999;")
+        sql = ("UPDATE roketto_dan.powercenters SET power_generation ="+str(pwr*1000)+" WHERE id = 9999;")
 
         self.mycursor.execute(sql)
         self.cnx.commit()
@@ -81,13 +94,19 @@ class DB_Connector:
         myresult = self.mycursor.fetchone()
 
         return myresult 
-
-    def getProduction(self,name):
+    def getProduction(self,id):
         """
         returns the power production for a given power center(int)
         """
-        word = "\"" +name+ "\""
-        sql = ("SELECT production FROM roketto_dan.powercenters WHERE name = "+word+";")
+        word = "\"" +str(id)+ "\""
+        sql = ("SELECT power_generation FROM roketto_dan.powercenters WHERE id = "+word+";")
+        self.mycursor.execute(sql)
+        myresult = self.mycursor.fetchone()
+
+        return myresult
+
+    def getTotalConsumption(self):
+        sql = ("select sum(consumption) from roketto_dan.datacenters;")
         self.mycursor.execute(sql)
         myresult = self.mycursor.fetchone()
 
@@ -104,22 +123,22 @@ class DB_Connector:
 
         return myresult
 
-    def insertRelation(self, datacenter_id, powercenter_id, consumption):
+    def insertRelation(self, datacenter_id, powercenter_id, c_footprint):
         """
-        insert a <datacenter, powercenter> pair with an assoicated consumption
+        insert a <datacenter, powercenter> pair with an assoicated carbon footprint
         """
-        sql = ("INSERT INTO roketto_dan.pairings (datacenter_id, powercenter_id, consumption)"
-                "VALUES (" + str(datacenter_id) + ", " + str(powercenter_id) + ", " + str(consumption) + ")")
+        sql = ("INSERT INTO roketto_dan.pairings (datacenter_id, powercenter_id, c_footprint)"
+                "VALUES (" + str(datacenter_id) + ", " + str(powercenter_id) + ", " + str(c_footprint) + ")")
 
         self.mycursor.execute(sql)
         self.cnx.commit()
 
     def queryRelation(self):
         """
-        return a <datacenter, powercenter> pair with an assoicated consumption
+        return a <datacenter, powercenter> pair with an assoicated carbon footprint
         """
         sql = ("SELECT * FROM roketto_dan.pairings")
-        
+
         self.mycursor.execute(sql)
         myresult = self.mycursor.fetchall()
 
@@ -175,7 +194,6 @@ class DB_Connector:
             self.mycursor.execute(query)
 
         self.cnx.commit()
-
 
 
 
