@@ -10,7 +10,15 @@ con = DB_Connector("root", "ca$hm0ney", "roketto-dan.c0k9vwwy6vyu.us-west-1.rds.
 # pow_rows = con.getTable("powercenters")
 # print(len(pow_rows))
 
-con.SP_updateProd(10)
+# test SP_updateProd
+# con.SP_updateProd(10)
+
+# test insertRelatioN()
+con.insertRelation(2, 4, 6)
+relations = con.queryRelation()
+
+for row in relations:
+    print(row)
 
 
 #  con.SP_updateProd(20)

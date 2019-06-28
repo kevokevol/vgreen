@@ -35,15 +35,17 @@ class DB_Connector:
         myresult = self.mycursor.fetchall()
    
         return myresult
+
     def SP_updateProd(self,pwr):
         """
-        updates our solar panel production
+        updates our solar panel production (id=9999)
         """
 
-        sql = ("UPDATE roketto_dan.powercenters SET power_generation ="+str(pwr)+" WHERE id = 9999;")
+        sql = ("UPDATE roketto_dan.powercenters SET power_generation = " + str(pwr) + " WHERE id = 9999;")
 
         self.mycursor.execute(sql)
         self.cnx.commit()
+
     def getLatLongData(self,cityName):
         """
         returns the latitude and longitude of a given data center(tupule)
@@ -55,6 +57,7 @@ class DB_Connector:
         myresult = self.mycursor.fetchall()
 
         return myresult
+
     def getLatLongPower(self,name):
         """
         returns the latitude and longitude of a given power center(tupule)
@@ -66,6 +69,7 @@ class DB_Connector:
         myresult = self.mycursor.fetchall()
 
         return myresult
+
     def getConsumption(self,name):
         """
         returns the power consumption for a given data center(int)
@@ -76,6 +80,7 @@ class DB_Connector:
         myresult = self.mycursor.fetchone()
 
         return myresult 
+
     def getProduction(self,name):
         """
         returns the power production for a given power center(int)
@@ -98,6 +103,26 @@ class DB_Connector:
 
         return myresult
 
+    def insertRelation(self, datacenter_id, powercenter_id, consumption):
+        """
+        insert a <datacenter, powercenter> pair with an assoicated consumption
+        """
+        sql = ("INSERT INTO roketto_dan.pairings (datacenter_id, powercenter_id, consumption)"
+                "VALUES (" + str(datacenter_id) + ", " + str(powercenter_id) + ", " + str(consumption) + ")")
+
+        self.mycursor.execute(sql)
+        self.cnx.commit()
+
+    def queryRelation(self):
+        """
+        return a <datacenter, powercenter> pair with an assoicated consumption
+        """
+        sql = ("SELECT * FROM roketto_dan.pairings")
+        
+        self.mycursor.execute(sql)
+        myresult = self.mycursor.fetchall()
+
+        return myresult
 
 
     def populate_power_plant_table(self, table_name, path_to_power_plant_data):
@@ -119,10 +144,7 @@ class DB_Connector:
 
 
     
-    #for x in myresult:
-    #    print(x)
-    #
-    #cnx.close()
+
 
 
 if __name__ == "__main__":
