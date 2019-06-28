@@ -15,6 +15,8 @@ Power station data is obtained from the [US Energy Information Administration](h
 
 This is the 2019 VMWare Borathon submission of Kevin Li, Andrew Chen, Aubhro Sengupta, James Kim, and Dan Kwon. 
 
+Live demo at be viewed [here](https://www.youtube.com/watch?v=IwvMMquc78g). 
+
 # Startup Instructions
 
 Clone the repo
