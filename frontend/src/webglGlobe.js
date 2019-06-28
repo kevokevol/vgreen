@@ -8,8 +8,15 @@ import styled from 'styled-components';
 
 const GlobeContainer = styled.div`
     width: 66vw;
-    height: 75vh;
+    height: calc(100vh - 50px);
     display: inline-block;
+`
+
+const GlobeInfo = styled.div`
+    position: absolute;
+    width: 66vw;
+    left: 10px;
+    bottom: 10px;
 `
 
 class WebGLGlobe extends React.Component {
@@ -26,6 +33,10 @@ class WebGLGlobe extends React.Component {
         return (
             <div className="globe-wrapper">
                 <GlobeContainer className="container" ref={(el) => {this.setRef("container", el)}}/> 
+                <GlobeInfo>
+                    <h2>Data Center World Map</h2>
+                    <h3>Each pillar represents one data center. Its height represents how much power it consumes, and its color represents its CO2 emissions per kWH.</h3>
+                </GlobeInfo>
             </div>
         )
     }
