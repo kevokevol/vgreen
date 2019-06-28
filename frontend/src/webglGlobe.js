@@ -8,7 +8,7 @@ import styled from 'styled-components';
 
 const GlobeContainer = styled.div`
     width: 66vw;
-    height: 75vh;
+    height: calc(100vh - 50px);
     display: inline-block;
 `
 

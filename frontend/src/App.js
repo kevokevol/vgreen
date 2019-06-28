@@ -3,6 +3,7 @@ import APIClient from './apiClient'
 import WebGLGlobe from './webglGlobe'
 import Navbar from './Navbar'
 import Analytics from './Analytics'
+import GlobalStyle from './helpers/GlobalStyle'
 import styled from 'styled-components'
 
 const Wrapper = styled.div`
@@ -26,27 +27,28 @@ class App extends React.Component {
   constructor(props){
     super(props)
     this.powerData = [
-      {x: 1, y: 4},
-      {x: 2, y: 2},
-      {x: 3, y: 6},
-      {x: 4, y: 6},
-      {x: 5, y: 6}
+      {x: 1, y: 0},
+      {x: 2, y: 0},
+      {x: 3, y: 0},
+      {x: 4, y: 0},
+      {x: 5, y: 0}
     ]
     this.renewableData = [
-      {x: 1, y: 4},
-      {x: 2, y: 2},
-      {x: 3, y: 6},
-      {x: 4, y: 6},
-      {x: 5, y: 6}
+      {x: 1, y: 0},
+      {x: 2, y: 0},
+      {x: 3, y: 0},
+      {x: 4, y: 0},
+      {x: 5, y: 0}
   ]
     this.emissionData = [
-      {x: 1, y: 4},
-      {x: 2, y: 2},
-      {x: 3, y: 6},
-      {x: 4, y: 6},
-      {x: 5, y: 6}
+      {x: 1, y: 0},
+      {x: 2, y: 0},
+      {x: 3, y: 0},
+      {x: 4, y: 0},
+      {x: 5, y: 0}
   ]
     this.globeData = null
+    this.dataCenterEmission = null
     this.state = {
       data: {},
     }
@@ -77,11 +79,15 @@ class App extends React.Component {
   updateGlobeData(){
     let data = this.state.data.data_centers
     let coords = []
+    let emissions = []
     data.map(element => {
         element[4] /= 10000
-        return coords.push(...element.slice(2, 7).map(el => parseFloat(el)))
+        coords.push(...element.slice(2, 6).map(el => parseFloat(el)))
+        emissions.push([element[1], element[5]])
       }
     );
+    emissions = emissions.sort((a,b)=>a[1] - b[1])
+    this.dataCenterEmission = emissions
     this.globeData = [["data", coords]]
   }
 
@@ -95,6 +101,7 @@ class App extends React.Component {
   render(){
     return (
       <div className="App">
+        <GlobalStyle/>
         <Navbar></Navbar>
         <Wrapper>
           <GlobeWrapper>
@@ -104,6 +111,7 @@ class App extends React.Component {
             powerData={this.powerData}
             emissionData={this.emissionData}
             renewableData ={this.renewableData}
+            dataCenterEmission = {this.dataCenterEmission}
           ></Analytics>
         </Wrapper>
       </div>
