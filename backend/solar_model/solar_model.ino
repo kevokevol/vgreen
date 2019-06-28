@@ -25,11 +25,12 @@ float sensitivity[] ={
        }; 
 
 const float QOV = 0.5 * VCC;// set quiescent Output voltage of 0.5V
-float inst_voltage = 0; // internal variable for voltage
-float voltage   = 0;
-float current   = 0;
-float watt      = 0;
-unsigned long energy    = 0;
+float inst_voltage   = 0; // internal variable for voltage
+float voltage        = 0;
+float current        = 0;
+float watt           = 0;
+unsigned long energy = 0;
+float scaled_watt    = 0;
 
 // create an EthernetUdp instance to let us send/receive packets
 EthernetUDP Udp;
@@ -157,8 +158,10 @@ void loop() {
   if (current == 0) 
     current = 0.01;
   watt = voltage * current * 1000.00;
+  scaled_watt = voltage * 0.01 * 1000.00;
   //energy = (watt * time) / (3600);
   energy = watt * 8760;
+  
   Serial.print("energy: ");
   Serial.println(energy);
 
@@ -172,6 +175,7 @@ void loop() {
 
   // print readings
   printToLCD(watt, voltage, print_energy, current); 
+  energy = scaled_watt * 8760;
   buildPacket(kwData, energy);
   Serial.print("kwData: ");
   Serial.println(kwData);

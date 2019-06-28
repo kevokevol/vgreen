@@ -163,6 +163,7 @@ class DB_Connector:
             self.cnx.commit()
 
 
+    @staticmethod
     def _euclidean_distance(lat1, lng1, lat2, lng2):
         return math.sqrt((lat1 - lat2)**2 + (lng1 - lng2)**2)
 
@@ -175,7 +176,7 @@ class DB_Connector:
 
             power_lat = power_centers[0][2]
             power_lng = power_centers[0][3]
-            min_distance = _euclidean_distance(data_lat, data_lng, power_lat, power_lng)
+            min_distance = self._euclidean_distance(data_lat, data_lng, power_lat, power_lng)
             associated_power_plant = power_centers[0]
             for power_center in power_centers:
                 data_lat = data_center[2]
@@ -183,13 +184,15 @@ class DB_Connector:
 
                 power_lat = power_center[2]
                 power_lng = power_center[3]
-                pot_min_distance = _euclidean_distance(data_lat, data_lng, power_lat, power_lng)
+                pot_min_distance = self._euclidean_distance(data_lat, data_lng, power_lat, power_lng)
 
                 if pot_min_distance < min_distance:
                     min_distance = pot_min_distance
                     associated_power_plant = power_center
 
-            query = "INSERT INTO roketto_dan.{} VALUES({},{},{})".format(rel_table_name, data_center[0], associated_power_plant[0], associated_power_plant[5]/associated_power_plant[4])
+            footprint = associated_power_plant[5]/associated_power_plant[4]
+            print("Footprint " + footprint)
+            query = "INSERT INTO roketto_dan.{} VALUES({},{},{})".format(rel_table_name, data_center[0], associated_power_plant[0], footprint)
             print(query)
             self.mycursor.execute(query)
 
@@ -199,6 +202,8 @@ class DB_Connector:
 
 if __name__ == "__main__":
     conn = DB_Connector("root", "ca$hm0ney", "roketto-dan.c0k9vwwy6vyu.us-west-1.rds.amazonaws.com", "roketto_dan")
-    path = os.path.abspath(os.path.join(os.pardir, os.getcwd(), "../out/power_centers.json"))
-    print(path)
-    conn.populate_power_plant_table("powercenters", path)
+    # path = os.path.abspath(os.path.join(os.pardir, os.getcwd(), "../out/power_centers.json"))
+    # print(path)
+    # conn.populate_power_plant_table("powercenters", path)
+
+    conn.populate_relations_table("pairings", "datacenters", "powercenters")

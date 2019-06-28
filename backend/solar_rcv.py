@@ -49,7 +49,7 @@ while True:
     pwr = decode_pwr_data(pwr_ascii_string)
 
     # scale pwr to be a "reasonable" KwH output
-    pwr = pwr * 1000;
+    pwr = pwr * 500;
     print("recieved", pwr)
     #print(received_data)
 
