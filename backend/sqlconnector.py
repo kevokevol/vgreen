@@ -35,12 +35,26 @@ class DB_Connector:
         myresult = self.mycursor.fetchall()
    
         return myresult
+    
+    def getTableInState(self, table, state):
+        """
+        returns all rows matching state (two letter code) to the specified table
+        """
+
+        # SQL query
+        sql = ("SELECT * FROM "+ table +" WHERE state=\""+state+"\";")
+    
+        self.mycursor.execute(sql)
+        myresult = self.mycursor.fetchall()
+   
+        return myresult
+
     def SP_updateProd(self,pwr):
         """
         updates our solar panel production
         """
 
-        sql = ("UPDATE roketto_dan.powercenters SET power_generation ="+str(pwr)+" WHERE id = 9999;")
+        sql = ("UPDATE roketto_dan.powercenters SET power_generation ="+str(pwr*1000)+" WHERE id = 9999;")
 
         self.mycursor.execute(sql)
         self.cnx.commit()
@@ -76,12 +90,19 @@ class DB_Connector:
         myresult = self.mycursor.fetchone()
 
         return myresult 
-    def getProduction(self,name):
+    def getProduction(self,id):
         """
         returns the power production for a given power center(int)
         """
-        word = "\"" +name+ "\""
-        sql = ("SELECT production FROM roketto_dan.powercenters WHERE name = "+word+";")
+        word = "\"" +str(id)+ "\""
+        sql = ("SELECT power_generation FROM roketto_dan.powercenters WHERE id = "+word+";")
+        self.mycursor.execute(sql)
+        myresult = self.mycursor.fetchone()
+
+        return myresult
+
+    def getTotalConsumption(self):
+        sql = ("select sum(consumption) from roketto_dan.datacenters;")
         self.mycursor.execute(sql)
         myresult = self.mycursor.fetchone()
 
@@ -119,10 +140,8 @@ class DB_Connector:
 
 
     
-    #for x in myresult:
-    #    print(x)
-    #
-    #cnx.close()
+    def close_connection(self):
+        self.cnx.close()
 
 
 if __name__ == "__main__":

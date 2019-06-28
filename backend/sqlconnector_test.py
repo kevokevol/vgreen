@@ -10,16 +10,16 @@ con = DB_Connector("root", "ca$hm0ney", "roketto-dan.c0k9vwwy6vyu.us-west-1.rds.
 # pow_rows = con.getTable("powercenters")
 # print(len(pow_rows))
 
-con.SP_updateProd(10)
+#con.SP_updateProd(10)
 
 
 #  con.SP_updateProd(20)
 
-# # query rows
-# rows = con.getTable("datacenters")
+# query rows
+rows = con.getTableInState("powercenters", "HI")
 
-# # print rows
-# for dc in rows:
-#     print(dc)
+# print rows
+for dc in rows:
+    print(dc)
 
 
