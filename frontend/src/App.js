@@ -3,8 +3,9 @@ import APIClient from './apiClient'
 import WebGLGlobe from './webglGlobe'
 import Navbar from './Navbar'
 import Analytics from './Analytics'
-import GlobalStyle from './helpers/GlobalStyle'
-import styled from 'styled-components'
+import GlobalStyle, {theme} from './helpers/GlobalStyle'
+import styled, {ThemeProvider} from 'styled-components'
+
 
 const Wrapper = styled.div`
   margin-top: 50px;
@@ -100,21 +101,23 @@ class App extends React.Component {
   
   render(){
     return (
-      <div className="App">
-        <GlobalStyle/>
-        <Navbar></Navbar>
-        <Wrapper>
-          <GlobeWrapper>
-            {this.globeData && <WebGLGlobe data={this.globeData}/>}
-          </GlobeWrapper>
-          <Analytics 
-            powerData={this.powerData}
-            emissionData={this.emissionData}
-            renewableData ={this.renewableData}
-            dataCenterEmission = {this.dataCenterEmission}
-          ></Analytics>
-        </Wrapper>
-      </div>
+        <ThemeProvider theme={theme}>
+          <React.Fragment>
+            <GlobalStyle/>
+            <Navbar></Navbar>
+            <Wrapper>
+              <GlobeWrapper>
+                {this.globeData && <WebGLGlobe data={this.globeData}/>}
+              </GlobeWrapper>
+              <Analytics 
+                powerData={this.powerData}
+                emissionData={this.emissionData}
+                renewableData ={this.renewableData}
+                dataCenterEmission = {this.dataCenterEmission}
+              ></Analytics>
+            </Wrapper>
+          </React.Fragment>
+        </ThemeProvider>
     );
   }
 }

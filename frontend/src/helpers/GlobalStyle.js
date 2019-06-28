@@ -31,4 +31,14 @@ const GlobalStyle = createGlobalStyle`
         margin-bottom: 5px;
     }
 `
+
+export const theme = {
+    color1: 'rgb(73,122,54)',
+    color1transparent: 'rgba(73,122,54, 0.25)',
+    color2: 'rgb(51, 118, 182)',
+    color2transparent: 'rgba(51, 118, 182, 0.25)',
+    color3: 'rgb(185, 53, 73)',
+    color3transparent: 'rgba(185, 53, 73, 0.25)'
+};
+ 
 export default GlobalStyle

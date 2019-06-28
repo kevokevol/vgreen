@@ -18,7 +18,7 @@ const NavWrapper = styled.div`
 export default class Navbar extends React.Component {
     render(){
         return (<NavWrapper>
-                <img src="assets/vmware.logo.png" width="125px"></img>
+            <img src="assets/vmware.logo.png" width="125px"></img>
         </NavWrapper>)
     }
 }

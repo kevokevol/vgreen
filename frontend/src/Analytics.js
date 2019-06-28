@@ -1,5 +1,5 @@
 import React from 'react'
-import styled from 'styled-components'
+import styled, { withTheme } from 'styled-components'
 import {XYPlot, XAxis, YAxis, VerticalGridLines, HorizontalGridLines, AreaSeries} from 'react-vis';
 
 const AnalyticsWrapper = styled.div`
@@ -10,7 +10,7 @@ const AnalyticsWrapper = styled.div`
     align-items: center;
     flex-direction: column;
     overflow-y: scroll;
-    padding-top: 50px;
+    padding-top: 35px;
     box-sizing: border-box;
 `
 
@@ -54,7 +54,7 @@ const DataCenter = styled.div`
     }
 `
 
-export default class Analytics extends React.Component {
+class Analytics extends React.Component {
     render(){
         let powerData = this.props.powerData;
         let renewableData = this.props.renewableData
@@ -65,13 +65,13 @@ export default class Analytics extends React.Component {
             let _greenest = this.props.dataCenterEmission.slice(0,5)
             let _dirtiest = this.props.dataCenterEmission.slice(n-5, n).reverse()
             Greenest = _greenest.map((el, i)=>
-                <DataCenter color={"green"} key={i}>
+                <DataCenter color={this.props.theme.color1} key={i}>
                     <h3>{el[0]}</h3>
                     <h3>{el[1]}</h3>
                 </DataCenter>
             )
             Dirtiest = _dirtiest.map((el, i)=>
-                <DataCenter color={"red"} key={i}>
+                <DataCenter color={this.props.theme.color3} key={i}>
                     <h3>{el[0]}</h3>
                     <h3>{el[1]}</h3>
                 </DataCenter>
@@ -93,14 +93,14 @@ export default class Analytics extends React.Component {
                         <XAxis 
                         hideTicks
                         style={{
-                            line: {stroke: 'blue'},
+                            line: {stroke: this.props.theme.color2},
                         }}/>
                         <YAxis
                             style={{
-                            line: {stroke: 'blue'},
+                            line: {stroke: this.props.theme.color2},
                             text: {
                                 stroke: 'none',
-                                fill: 'blue',
+                                fill: this.props.theme.color2,
                                 fontWeight: 600,
                                 fontFamily: 'Metropolis',
                                 fontWeight: 'medium',
@@ -108,8 +108,8 @@ export default class Analytics extends React.Component {
                                 fontSize: '0.75rem'}
                         }}/>
                         <AreaSeries
-                            stroke={'blue'}
-                            fill={'rgba(0,0,255,0.25)'}
+                            stroke={this.props.theme.color2}
+                            fill={this.props.theme.color2transparent}
                             data={powerData}/>
                     </XYPlot>
                 </Chart>
@@ -127,19 +127,19 @@ export default class Analytics extends React.Component {
                         <XAxis 
                         hideTicks
                         style={{
-                            line: {stroke: 'green'},
+                            line: {stroke: this.props.theme.color1},
                         }}/>
                         <YAxis 
                             style={{
-                            line: {stroke: 'green'},
-                            text: {stroke: 'none', fill: 'green', fontWeight: 600, fontFamily: 'Metropolis',
+                            line: {stroke: this.props.theme.color1},
+                            text: {stroke: 'none', fill: this.props.theme.color1, fontWeight: 600, fontFamily: 'Metropolis',
                             fontWeight: 'medium',
                             textTransform: 'uppercase',
                             fontSize: '0.75rem'}
                         }}/>
                         <AreaSeries
-                            stroke={'green'}
-                            fill={'rgba(0,255,0,0.25)'}
+                            stroke={this.props.theme.color1}
+                            fill={this.props.theme.color1transparent}
                             data={renewableData}/>
                     </XYPlot>
                 </Chart>
@@ -157,19 +157,19 @@ export default class Analytics extends React.Component {
                         <XAxis 
                         hideTicks
                         style={{
-                            line: {stroke: 'red'},
+                            line: {stroke: this.props.theme.color3},
                         }}/>
                         <YAxis 
                             style={{
-                            line: {stroke: 'red'},
-                            text: {stroke: 'none', fill: 'red', fontWeight: 600,fontFamily: 'Metropolis',
+                            line: {stroke: this.props.theme.color3},
+                            text: {stroke: 'none', fill: this.props.theme.color3, fontWeight: 600,fontFamily: 'Metropolis',
                             fontWeight: 'medium',
                             textTransform: 'uppercase',
                             fontSize: '0.75rem'}
                         }}/>
                         <AreaSeries
-                            stroke={'red'}
-                            fill={'rgba(255,0,0,0.25)'}
+                            stroke={this.props.theme.color3}
+                            fill={this.props.theme.color3transparent}
                             data={emissionData}/>
                     </XYPlot>
                 </Chart>
@@ -189,3 +189,5 @@ export default class Analytics extends React.Component {
         )
     }
 }
+
+export default withTheme(Analytics)
