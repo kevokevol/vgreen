@@ -40,7 +40,7 @@ class DB_Connector:
         updates our solar panel production
         """
 
-        sql = ("UPDATE roketto_dan.powercenters SET production ="+str(pwr)+" WHERE id = 0;")
+        sql = ("UPDATE roketto_dan.powercenters SET power_generation ="+str(pwr)+" WHERE id = 9999;")
 
         self.mycursor.execute(sql)
         self.cnx.commit()

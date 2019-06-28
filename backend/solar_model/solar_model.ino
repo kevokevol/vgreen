@@ -29,7 +29,7 @@ float inst_voltage = 0; // internal variable for voltage
 float voltage   = 0;
 float current   = 0;
 float watt      = 0;
-float energy    = 0;
+unsigned long energy    = 0;
 
 // create an EthernetUdp instance to let us send/receive packets
 EthernetUDP Udp;
@@ -43,8 +43,6 @@ byte mac[] = {
 unsigned int sendPort = 9000;
 
 // desktop IP
-//IPAddress ip(10, 1, 193, 147);
-//IPAddress ip(10, 0, 1, 27);
 IPAddress ip(8, 8, 8, 4);
 
 
@@ -55,12 +53,12 @@ IPAddress ip(8, 8, 8, 4);
 void printToLCD(float watt, float voltage, float energy, float amps) {
     lcd.setCursor(1,0); // set the cursor at 1st col and 1st row
     lcd.print(watt);
-    lcd.print("mW ");
+    lcd.print("mW  ");
     lcd.print(voltage);
     lcd.print("V  ");
     lcd.setCursor(1,1); // set the cursor at 1st col and 2nd row
-    lcd.print(energy, 3);
-    lcd.print("mWH ");
+    lcd.print(energy, 0);
+    lcd.print("mWH  ");
     lcd.print(amps);
     lcd.print("A ");
 }
@@ -97,20 +95,29 @@ float readSolarVoltage() {
   int sensor_reading = analogRead(A1);
   float voltage = sensor_reading * (5.0/1023.0);
 
+  if (voltage < 0)
+    voltage = abs(voltage);
   return voltage;
 }
 
 /*
  * Build packet to send via UDP
  */
-void buildPacket(char pkt[4], int num) {
-  pkt[3] = '0' + num % 10;
-  num /= 10;
-  pkt[2] = '0' + num % 10;
-  num /= 10;
-  pkt[1] = '0' + num % 10;
-  num /= 10;
-  pkt[0] = '0' + num % 10;
+void buildPacket(char pkt[5], unsigned long num) {
+  Serial.print("packing: ");
+  Serial.println(num);
+//  pkt[3] = '0' + num % 10;
+//  num /= 10;
+//  pkt[2] = '0' + num % 10;
+//  num /= 10;
+//  pkt[1] = '0' + num % 10;
+//  num /= 10;
+//  pkt[0] = '0' + num % 10;
+
+  for (int i = 5; i >= 0; i--) {
+    pkt[i] = '0' + num % 10;
+    num /= 10;
+  }
 }
 
 void setup() {
@@ -140,17 +147,8 @@ void setup() {
 
 void loop() {
   float solar_voltage;
-  char kwData[4];
-
-//  kwData[0] = '1';
-//  kwData[1] = '2';
-//  kwData[2] = '3';
-//  kwData[3] = '5';
-
-  // get time passed since program has started
-  long milisec = millis();
-  long time = milisec/1000;
-
+  char kwData[5];
+  
   // read current and voltage
   current = readCurrent();
   voltage = readVoltage();
@@ -159,13 +157,23 @@ void loop() {
   if (current == 0) 
     current = 0.01;
   watt = voltage * current * 1000.00;
-  energy = (watt * time) / (3600);
+  //energy = (watt * time) / (3600);
+  energy = watt * 8760;
+  Serial.print("energy: ");
+  Serial.println(energy);
+
+  // divided by a thousand to print mWH
+  unsigned long print_energy = energy / 1000;
+  
+  Serial.print("true energy: ");
+  Serial.println(watt * 8760);
+  Serial.print("Print_energy: ");
+  Serial.println(print_energy);
 
   // print readings
-  printToLCD(watt, voltage, energy, current); 
-
-  // DELETE LATER for testing sake send voltage * 100
-  buildPacket(kwData, watt);
+  printToLCD(watt, voltage, print_energy, current); 
+  buildPacket(kwData, energy);
+  Serial.print("kwData: ");
   Serial.println(kwData);
 
   // send data to desktop

@@ -6,8 +6,13 @@ con = DB_Connector("root", "ca$hm0ney", "roketto-dan.c0k9vwwy6vyu.us-west-1.rds.
 #for x in rows:
 #    print(x)
 
-pow_rows = con.getTable("powercenters")
-print(len(pow_rows))
+# print size of table
+# pow_rows = con.getTable("powercenters")
+# print(len(pow_rows))
+
+con.SP_updateProd(10)
+
+
 #  con.SP_updateProd(20)
 
 # # query rows

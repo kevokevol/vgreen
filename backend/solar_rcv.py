@@ -1,6 +1,11 @@
+from sqlconnector import DB_Connector
+
 import socket
 import signal
 import sys
+
+# connect to DB
+con = DB_Connector("root", "ca$hm0ney", "roketto-dan.c0k9vwwy6vyu.us-west-1.rds.amazonaws.com", "roketto_dan")
 
 # close socket when SIGINT signal is received
 def signal_handler(sig, frame):
@@ -9,7 +14,7 @@ def signal_handler(sig, frame):
     sys.exit(0)
 
 # Decode ascii string from socket for power (KwH)
-def decode_distance_data(binary_ascii_string):
+def decode_pwr_data(binary_ascii_string):
   one_digit_char = binary_ascii_string[3]
   tens_digit_char = binary_ascii_string[2]
   hundreds_digit_char = binary_ascii_string[1]
@@ -40,9 +45,16 @@ signal.signal(signal.SIGINT, signal_handler)
 while True:
     print("Listening...")
     received_data = pwr_listener_socket.recvfrom(1024)
-    distance_ascii_string = received_data[0][0:4]
-    final_dist = decode_distance_data(distance_ascii_string)
-    print("recieved", final_dist)
+    pwr_ascii_string = received_data[0][0:4]
+    pwr = decode_pwr_data(pwr_ascii_string)
+
+    # scale pwr to be a "reasonable" KwH output
+    pwr = pwr * 1000;
+    print("recieved", pwr)
+    #print(received_data)
+
+    # add power to database
+    con.SP_updateProd(pwr)
 
 pwr_listener_socket.close()
 
