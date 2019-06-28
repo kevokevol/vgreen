@@ -120,7 +120,7 @@ class Analytics extends React.Component {
                 </ChartTitle>
                 <Chart>
                     <XYPlot
-                        yDomain={[0,3000]}
+                        yDomain={[0,800]}
                         width={300}
                         height={150}>
                         <VerticalGridLines />
