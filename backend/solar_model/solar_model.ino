@@ -185,5 +185,5 @@ void loop() {
   Udp.write(kwData);
   Udp.endPacket();
 
-  delay(500);
+  delay(2500);
 }
