@@ -103,22 +103,22 @@ class DB_Connector:
 
         return myresult
 
-    def insertRelation(self, datacenter_id, powercenter_id, consumption):
+    def insertRelation(self, datacenter_id, powercenter_id, c_footprint):
         """
-        insert a <datacenter, powercenter> pair with an assoicated consumption
+        insert a <datacenter, powercenter> pair with an assoicated carbon footprint
         """
-        sql = ("INSERT INTO roketto_dan.pairings (datacenter_id, powercenter_id, consumption)"
-                "VALUES (" + str(datacenter_id) + ", " + str(powercenter_id) + ", " + str(consumption) + ")")
+        sql = ("INSERT INTO roketto_dan.pairings (datacenter_id, powercenter_id, c_footprint)"
+                "VALUES (" + str(datacenter_id) + ", " + str(powercenter_id) + ", " + str(c_footprint) + ")")
 
         self.mycursor.execute(sql)
         self.cnx.commit()
 
     def queryRelation(self):
         """
-        return a <datacenter, powercenter> pair with an assoicated consumption
+        return a <datacenter, powercenter> pair with an assoicated carbon footprint
         """
         sql = ("SELECT * FROM roketto_dan.pairings")
-        
+
         self.mycursor.execute(sql)
         myresult = self.mycursor.fetchall()
 
